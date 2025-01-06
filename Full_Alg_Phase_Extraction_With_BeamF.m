@@ -3,7 +3,7 @@ close all;
 clc;
 
 load('BGT60TR13Crecord.mat')
-load('PPG_data.mat')
+
 
 
 Frames = BGT60TR13Crecord;
@@ -374,10 +374,6 @@ y1 = y1./max(abs(y1));
 subplot(2,1,1),plot(time,delayseq(y1,-2)),grid
 title('Data : sd-ppg-n-jvp-45.raw')
 xlabel('Time [sec]');ylabel('Normalized Amplitude')
-%hold on
-subplot(2,1,2),plot(timedomainPPG(:,1)-timedomainPPG(1,1),(timedomainPPG(:,2)-0*mean(timedomainPPG(:,2)))/max((timedomainPPG(:,2)-0*mean(timedomainPPG(:,2)))),'r');
-%legend('BGT60TR13C','PPG Signal')
-xlabel('Time [sec]');ylabel('Normalized Amplitude'),grid
 
 disp('Please select the reference JVP pulse...')
 [x_pulse,y_pulse] = ginput(2);
@@ -405,9 +401,6 @@ plot(Peak_Points*Radar_Parameter.Frame_Period_sec,y1(Peak_Points),'xr','LineWidt
 xlabel('Time [sec]');ylabel('Normalized Amplitude'),
 legend('JVP Signal','Detected Peaks')
 title('Data : sd-ppg-n-jvp-45.raw')
-subplot(2,1,2),plot(timedomainPPG(:,1)-timedomainPPG(1,1),(timedomainPPG(:,2)-0*mean(timedomainPPG(:,2)))/max((timedomainPPG(:,2)-0*mean(timedomainPPG(:,2)))),'r');
-legend('PPG Signal')
-xlabel('Time [sec]');ylabel('Normalized Amplitude'),grid
 
 figure
 NFFT = 4096;
@@ -448,68 +441,3 @@ title('Spectrogram FFT-Range')
 %==========================================================================
 %==========================================================================
 
-
-figure
-lambda = c/fc;
-tt = (1e6)*(lambda/2)/(2*pi);
-
-time = [0:length(y1)-1]*Radar_Parameter.Frame_Period_sec/1;
-y1 = tt*y1;
-y1 = y1./max(abs(y1));
-
-subplot(2,1,1),plot(time,delayseq(y1,-2)),grid
-xlabel('Time [sec]');ylabel('Normalized Amplitude'),title('Data : sd-ppg-n-jvp-45.raw')
-subplot(2,1,2),plot(timedomainPPG(:,1)-timedomainPPG(1,1),(timedomainPPG(:,2)-0*mean(timedomainPPG(:,2)))/max((timedomainPPG(:,2)-0*mean(timedomainPPG(:,2)))),'r');
-xlabel('Time [sec]');ylabel('Normalized Amplitude'),grid
-
-disp('Please select two Contiguous JVP pulses...')
-[xx_pulse,yy_pulse] = ginput(4);
-i2_pulse = ceil(xx_pulse / Radar_Parameter.Frame_Period_sec);
-
-figure
-
-[Val_Max1, Index_Max1] = max(y1(i2_pulse(1):i2_pulse(2)));
-[Val_Max2, Index_Max2] = max(y1(i2_pulse(3):i2_pulse(4)));
-
-a_Points = [i2_pulse(1)+Index_Max1, i2_pulse(3)+Index_Max2];
-
-plot(time,y1), hold on, plot(a_Points(1)*(time(2)-time(1)),y1(a_Points(1)),'xr','LineWidth',2), hold on, plot(a_Points(2)*(time(2)-time(1)),y1(a_Points(2)),'xr','LineWidth',2), grid
-legend('JVP Signal','Peak1','Peak2')
-Delta_T = a_Points(2)*(time(2)-time(1)) - a_Points(1)*(time(2)-time(1))
-title(['\Delta t = ', num2str(Delta_T)])
-
-
-figure
-lambda = c/fc;
-tt = (1e6)*(lambda/2)/(2*pi);
-
-time = [0:length(y1)-1]*Radar_Parameter.Frame_Period_sec/1;
-y1 = tt*y1;
-y1 = y1./max(abs(y1));
-
-subplot(2,1,1),plot(time,delayseq(y1,-2)),grid
-xlabel('Time [sec]');ylabel('Normalized Amplitude')
-title('Data : sd-ppg-n-jvp-45.raw')
-subplot(2,1,2),plot(timedomainPPG(:,1)-timedomainPPG(1,1),(timedomainPPG(:,2)-0*mean(timedomainPPG(:,2)))/max((timedomainPPG(:,2)-0*mean(timedomainPPG(:,2)))),'r');
-xlabel('Time [sec]');ylabel('Normalized Amplitude'),grid
-
-disp('Please select time-aligned JVP and PPG pulses...')
-[xx_pulse,yy_pulse] = ginput(4);
-i2_pulse = ceil(xx_pulse / Radar_Parameter.Frame_Period_sec);
-
-
-figure
-
-[Val_Max1, Index_Max1] = max(y1(i2_pulse(1):i2_pulse(2)));
-[Val_Max2, Index_Max2] = min(y1(i2_pulse(3):i2_pulse(4)));
-
-a_Points = [i2_pulse(1)+Index_Max1, i2_pulse(3)+Index_Max2];
-
-
-plot(time(1:length(y1(a_Points(1):end))),y1(a_Points(1):end)./max(abs(y1(a_Points(1):end))))
-hold on
-plot([0:length(timedomainPPG(a_Points(2):end,2))-1]*(timedomainPPG(2,1)-timedomainPPG(1,1)),timedomainPPG(a_Points(2):end,2)-1*mean(timedomainPPG(a_Points(2):end,2)),'-.');
-
-xlabel('Time [sec]');ylabel('Normalized Amplitude'),grid
-
-legend('JVP Signal','PPG Signal')
