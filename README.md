@@ -1,6 +1,6 @@
 # JVP-signal-processing-using-60GHz-radar
 
-This code is designed for Jugular Venous Pulse data processing. The raw data was collected using Infineon-BGT60TR13C Radar. Once the data is collected, run the data_extract.mat file. For post processing, run the other .mat file.
+This code is designed for Jugular Venous Pulse data processing. For reference: (https://doi.org/10.1101/2024.06.04.24308313). The raw data was collected using Infineon-BGT60TR13C Radar. Once the data is collected, run the data_extract.mat file. For post processing, run the other .mat file.
 
 # Steps for Raw Data Collection
 1. Download the Radar GUI from the link [https://softwaretools.infineon.com/tools/com.ifx.tb.tool.radarfusiongui]
